@@ -7,48 +7,102 @@
             <h3>Create New Account</h3>
           </div>
           <form role="form">
-            <base-input
-              autocomplete
-              formClasses="input-group-alternative"
-              placeholder="Name"
-              addon-left-icon="ni ni-hat-3"
-              v-model="registerData.name"
-            >
-            </base-input>
+            <div class="form-group">
+              <base-input
+                autocomplete
+                formClasses="input-group-alternative"
+                placeholder="Full Name"
+                type="text"
+                addon-left-icon="ni ni-hat-3"
+                v-model="v$.registerData.name.$model"
+              >
+              </base-input>
+              <div class="pre-icon os-icon os-icon-user-male-circle"></div>
+              <!-- Error Message -->
+              <div
+                class="input-errors"
+                v-for="(error, index) of v$.registerData.name.$errors"
+                :key="index"
+              >
+                <div class="error-msg text-danger text-sm">
+                  {{ error.$message }}
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <base-input
+                autocomplete
+                formClasses="input-group-alternative"
+                placeholder="Email"
+                type="email"
+                addon-left-icon="ni ni-email-83"
+                v-model="v$.registerData.email.$model"
+                focused
+              >
+              </base-input>
+              <div class="pre-icon os-icon os-icon-email-2-at2"></div>
+              <!-- Error Message -->
+              <div
+                class="input-errors"
+                v-for="(error, index) of v$.registerData.email.$errors"
+                :key="index"
+              >
+                <div class="error-msg text-danger text-sm">
+                  {{ error.$message }}
+                </div>
+              </div>
+            </div>
 
-            <base-input
-              autocomplete
-              formClasses="input-group-alternative"
-              placeholder="Email"
-              type="email"
-              addon-left-icon="ni ni-email-83"
-              v-model="registerData.email"
-              focused
-            >
-            </base-input>
+            <div class="form-group">
+              <base-input
+                autocomplete
+                formClasses="input-group-alternative"
+                placeholder="Password"
+                type="password"
+                addon-left-icon="ni ni-lock-circle-open"
+                v-model="v$.registerData.password.$model"
+              >
+              </base-input>
+              <div class="pre-icon os-icon os-icon-fingerprint"></div>
+              <!-- Error Message -->
+              <div
+                class="input-errors"
+                v-for="(error, index) of v$.registerData.password.$errors"
+                :key="index"
+              >
+                <div class="error-msg text-danger text-sm">
+                  {{ error.$message }}
+                </div>
+              </div>
+            </div>
 
-            <base-input
-              autocomplete
-              formClasses="input-group-alternative"
-              placeholder="Password"
-              type="password"
-              addon-left-icon="ni ni-lock-circle-open"
-              v-model="registerData.password"
-            >
-            </base-input>
-
-            <base-input
-              autocomplete
-              formClasses="input-group-alternative"
-              placeholder="Confirm Password"
-              type="password"
-              addon-left-icon="ni ni-lock-circle-open"
-              v-model="registerData.con_password"
-            >
-            </base-input>
-
+            <div class="form-group">
+              <base-input
+                @base-input="checkPassword()"
+                autocomplete
+                formClasses="input-group-alternative"
+                placeholder="Confirm Password"
+                type="password"
+                addon-left-icon="ni ni-lock-circle-open"
+                v-model="v$.registerData.con_password.$model"
+              >
+              </base-input>
+              <!-- Error Message -->
+              <div
+                class="input-errors"
+                v-for="(error, index) of v$.registerData.con_password.$errors"
+                :key="index"
+              >
+                <div class="error-msg text-danger text-sm">
+                  {{ error.$message }}
+                </div>
+              </div>
+            </div>
             <div class="text-center">
-              <base-button @click="register()" type="primary" class="my-4"
+              <base-button
+                v-on:click="register()"
+                type="primary"
+                class="my-4"
                 >Create account</base-button
               >
             </div>
@@ -72,8 +126,22 @@
 </template>
 <script>
 import httpAxios from "@/utils/http-axios";
+import useVuelidate from "@vuelidate/core";
+import { required, email, minLength } from "@vuelidate/validators";
+
+export function validName(name) {
+  let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validNamePattern.test(name)) {
+    return true;
+  }
+  return false;
+}
+
 export default {
-  name: "register",
+  name: "Register",
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
       registerData: {
@@ -84,18 +152,31 @@ export default {
       },
     };
   },
+  validations() {
+    return {
+      registerData: {
+        name: {
+          required,
+          name_validation: {
+            $validator: validName,
+            $message:
+              "Invalid Name. Valid name only contain letters, dashes (-) and spaces",
+          },
+        },
+        email: { required, email },
+        password: { required, min: minLength(8) },
+        con_password: { required },
+      },
+    };
+  },
   methods: {
     async register() {
       const is_save = await httpAxios.post("register", this.registerData);
-      if (is_save) {
-        this.$swal({
-          position: "top-end",
-          icon: "success",
-          title: "Register Successfuuly!!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      if (is_save.success) {
+        this.$notify({ type: "success", text: "The operation completed" });
         this.$router.push("/login");
+      } else {
+        this.$notify({ type: "error ", text: "Register account failed!" });
       }
     },
   },
