@@ -4,7 +4,7 @@ import store from '@/store';
 // Create
 const service = axios.create({
   // baseURL: 'http://localhost:8000/',
-  baseURL: 'https://globalloan.netlify.app/',
+  baseURL: 'https://globalloanbackend.netlify.app/',
 });
 
 // Token
