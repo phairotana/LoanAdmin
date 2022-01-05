@@ -173,9 +173,20 @@ export default {
         .catch(function () {
           this.$notify({ type: "error ", text: "Register account failed!" });
         });
-      if (response.status == 200) {
-        this.$notify({ type: "success", text: "Register account successfully!" });
+      if (response.data.message == "email is already token") {
+        this.$notify({
+          type: "warn",
+          text: "This email is already token!",
+        });
+      }
+      if (response.data.success) {
+        this.$notify({
+          type: "success",
+          text: "Register account successfully!",
+        });
         this.$router.push("/login");
+      } else {
+        this.$notify({ type: "error ", text: "Register account failed!" });
       }
     },
   },
