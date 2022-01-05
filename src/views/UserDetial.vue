@@ -84,12 +84,14 @@
                   >
                     <em class="far fa-edit"></em>
                   </router-link>
-                  <router-link
-                    v-bind:to="'/user/' + userData.id"
+                  <button
+                    v-on:click="deleteMe(userData.id)"
+                    type="button"
                     class="btn btn-sm btn-danger"
+                    title="Delete"
                   >
                     <em class="far fa-trash-alt"></em>
-                  </router-link>
+                  </button>
                 </td>
               </tr>
             </table>
@@ -119,6 +121,31 @@ export default {
         })
         .catch(function (error) {
           console.log(error.message);
+        });
+    },
+    deleteMe(user_id) {
+      var self = this;
+      httpAxios
+        .delete("user/" + user_id)
+        .then(function (response) {
+          if (response.data.message == "Can not delete your current user") {
+            self.$notify({
+              type: "warn",
+              text: "You cannot delete user logged-in",
+            });
+          } else {
+            self.$notify({
+              type: "success",
+              text: "User has been deleted successfully!",
+            });
+            self.$router.push("/user");
+          }
+        })
+        .catch(function () {
+          self.$notify({
+            type: "error",
+            text: "Delete user faild!",
+          });
         });
     },
   },

@@ -37,16 +37,11 @@
           <div class="dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
-          <router-link 
-            to="/my-account"
-            class="btn-sm">
+          <router-link to="/my-account" class="btn-sm">
             <em class="ni ni-single-02"></em>
-            <span> My profile</span>
-          </router-link><br/>
-          <router-link 
-            to="/login" 
-            @click="logOut()"
-            class="btn-sm">
+            <span> My profile</span> </router-link
+          ><br />
+          <router-link to="/login" v-on:click="logOut" class="btn-sm">
             <em class="ni ni-user-run"></em>
             <span> Logout</span>
           </router-link>
@@ -75,15 +70,12 @@ export default {
       this.showMenu = !this.showMenu;
     },
     logOut() {
-      this.$store.commit('REMOVE_LOGGED_USER');
+      this.$notify({
+        type: "success",
+        text: "Loged-out, See you later!",
+      });
+      this.$store.commit("REMOVE_LOGGED_USER");
     },
-    // async currentUser() {
-    //   httpAxios.get("users/me").then(function (response) {
-    //     this.fetchUser = response.data.data;
-    //   }).catch(function (error) {
-    //     console.log(error.message);
-    //   });
-    // },
   },
 };
 </script>

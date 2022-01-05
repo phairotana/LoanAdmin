@@ -103,11 +103,25 @@ export default {
       var self = this;
       httpAxios
         .delete("user/" + user_id)
-        .then(function () {
+        .then(function (response) {
+          if (response.data.message == "Can not delete your current user") {
+            self.$notify({
+              type: "warn",
+              text: "You cannot delete user logged-in",
+            });
+          } else {
+            self.$notify({
+              type: "success",
+              text: "User has been deleted successfully!",
+            });
+          }
           self.getUsers();
         })
         .catch(function (error) {
-          console.log(error.message);
+          self.$notify({
+            type: "error",
+            text: "Delete user faild!",
+          });
         });
     },
   },

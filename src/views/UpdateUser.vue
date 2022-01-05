@@ -187,9 +187,21 @@ export default {
     },
     async updateUser() {
       const self = this;
-      const result = await httpAxios.put("user/" + self.$route.params.id, self.userData);
+      const result = await httpAxios.put(
+        "user/" + self.$route.params.id,
+        self.userData
+      );
       if (result.data.success) {
+        self.$notify({
+          type: "success",
+          text: "User has been updated successfully!",
+        });
         self.$router.push("/user");
+      } else {
+        self.$notify({
+          type: "error",
+          text: "Update user info faild!",
+        });
       }
     },
     onCancel() {
