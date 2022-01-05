@@ -31,30 +31,10 @@
               <div class="row">
                 <div class="col-lg-6 mb-4">
                   <label for="Product Name">Customer</label>
-                  <!-- <select
-                    class="form-control form-control-alternative"
-                    v-model="disbursementData.cus_id"
-                  >
-                    <option value=""></option>
-                    <option value="2">Phai Rotana</option>
-                    <option value="3">Mr Suy</option>
-                  </select> -->
                   <Multiselect
-                    v-model="value"
-                    mode="tags"
-                    placeholder="Choose your stack"
-                    :close-on-select="false"
-                    :filter-results="false"
-                    :min-chars="1"
-                    :resolve-on-load="false"
-                    :delay="0"
-                    :searchable="true"
-                    :options="
-                      async function (query) {
-                        return await fetchLanguages(query); // check JS block for implementation
-                      }
-                    "
-                  />
+                    v-model="selectCusName.value"
+                    v-bind="selectCusName"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <label for="Product Name">Product Name</label>
@@ -205,19 +185,6 @@
                 <em class="fas fa-window-close"></em>
                 Cancel
               </button>
-
-              <div>
-                <label class="typo__label">Select with search</label>
-                <multiselect
-                  v-model="value"
-                  :options="options"
-                  :custom-label="nameWithLang"
-                  placeholder="Select one"
-                  label="name"
-                  track-by="name"
-                ></multiselect>
-                <!-- <pre class="language-json"><code>{{ value  }}</code></pre> -->
-              </div>
             </div>
           </form>
         </card>
@@ -227,7 +194,36 @@
 </template>
 <script>
 import httpAxios from "@/utils/http-axios";
-import Multiselect from '@vueform/multiselect'
+import Multiselect from "@vueform/multiselect";
+import store from "@/store";
+
+const fetchCustomer = async (query) => {
+  let where = "";
+  if (query) {
+    where =
+      "id=" +
+      encodeURIComponent(
+        JSON.stringify({
+          firstName: {
+            $regex: `${query}|${query.toUpperCase()}|${
+              query[0].toUpperCase() + query.slice(1)
+            }`,
+          },
+        })
+      );
+  }
+  const response = await fetch("http://localhost:8000/customer?" + where, {
+    headers: {
+      "Content-Type": "application/json",
+      "x-access-token": "token-value",
+      Authorization: "Bearer " + store.getters.getLoggedUser.access_token,
+    },
+  });
+  const data = await response.json(); // Here you have the data that you need
+  return data.data.map((item) => {
+    return { value: item.id, label: item.first_name };
+  });
+};
 
 export default {
   name: "New disbursement",
@@ -236,22 +232,19 @@ export default {
   },
   data() {
     return {
-      example7: {
-        mode: "tags",
-        closeOnSelect: false,
-        value: [],
-        placeholder: "Choose your stack",
+      selectCusName: {
+        value: null,
+        placeholder: "Choose a customer",
         filterResults: false,
         minChars: 1,
         resolveOnLoad: false,
         delay: 0,
         searchable: true,
-        options: (query) => {
-          return fetchLanguages(query);
+        options: async (query) => {
+          return fetchCustomer(query);
         },
       },
       disbursementData: {
-        cus_id: "",
         product_type: "",
         repayment_method: "",
         interest_rate: "",
@@ -269,19 +262,33 @@ export default {
   },
   methods: {
     async createDisbursement() {
-      const isSave = await httpAxios.post(
-        "disbursement",
-        this.disbursementData
-      );
-      if (isSave) {
-        this.$swal({
-          position: "top-end",
-          icon: "success",
-          title: "The Loan create successfully!",
-          showConfirmButton: false,
-          timer: 1500,
+      const response = await httpAxios
+        .post("disbursement", {
+          cus_id: this.selectCusName.value,
+          product_type: this.disbursementData.product_type,
+          repayment_method: this.disbursementData.repayment_method,
+          interest_rate: this.disbursementData.interest_rate,
+          balance: this.disbursementData.balance,
+          duration_period: this.disbursementData.duration_period,
+          interest_period: this.disbursementData.interest_period,
+          currency: this.disbursementData.currency,
+          frequency: this.disbursementData.frequency,
+          duration: this.disbursementData.duration,
+          fee_rate: this.disbursementData.fee_rate,
+          dis_date: this.disbursementData.dis_date,
+          first_date: this.disbursementData.first_date,
+        })
+        .catch(function (error) {
+          this.$notify({ type: "error ", text: "Create disbursement failed!" });
+        });
+      if (response.data.success) {
+        this.$notify({
+          type: "success",
+          text: "The Loan create successfully!",
         });
         this.$router.push("/disbursed");
+      } else {
+        this.$notify({ type: "error ", text: "Create disbursement failed!" });
       }
     },
     onCancel() {
@@ -300,4 +307,3 @@ export default {
   padding-left: 0px !important;
 }
 </style>
-

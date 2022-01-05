@@ -164,14 +164,14 @@
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
                     <td class="border-0" style="width: 25%">
-                      {{ disDetial.dis_date }}
+                      {{ formatDate(disDetial.dis_date) }}
                     </td>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       First Payment Date
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
                     <td class="border-0" style="width: 25%">
-                      {{ disDetial.first_date }}
+                      {{ formatDate(disDetial.first_date) }}
                     </td>
                   </tr>
                 </table>
@@ -220,7 +220,6 @@
                         <th scope="">Balance</th>
                         <th scope="">Principal</th>
                         <th scope="">Interest</th>
-                        <th scope="">Penalty</th>
                         <th scope="">Fee</th>
                         <th scope="">Total</th>
                         <th scope="">Status</th>
@@ -233,15 +232,12 @@
                       >
                         <td v-if="index == 0">-</td>
                         <td v-else>{{ index }}</td>
-                        <td v-text="item.collection_date"></td>
+                        <td>{{formatDate(item.collection_date)}}</td>
                         <td v-text="formatCurrency(item.balance, '$')"></td>
                         <td v-text="formatCurrency(item.principal, '$')"></td>
                         <td v-text="formatCurrency(item.interest, '$')"></td>
-                        <td v-text="formatCurrency(item.penalty, '$')"></td>
                         <td v-text="formatCurrency(item.fee, '$')"></td>
-                        <td v-if="index == 0"></td>
                         <td
-                          v-else
                           v-text="
                             formatCurrency(
                               item.principal +
@@ -252,8 +248,16 @@
                             )
                           "
                         ></td>
-                        <td v-if="index == 0"></td>
-                        <td v-else v-text="item.status"></td>
+                        <td
+                          v-if="item.status != 'Not Yet Due'"
+                          v-text="item.status"
+                          class="font-weight-bold text-success"
+                        ></td>
+                        <td
+                          v-else
+                          v-text="item.status"
+                          class="font-weight-bold text-info"
+                        ></td>
                       </tr>
                     </tbody>
                     <tfoot class="thead-light">
@@ -282,7 +286,6 @@
                         <th scope="">Invoice Number</th>
                         <th scope="">Principal</th>
                         <th scope="">Interest</th>
-                        <th scope="">Penalty</th>
                         <th scope="">Fee</th>
                         <th scope="">Total</th>
                         <th scope="">Status</th>
@@ -294,16 +297,13 @@
                         :key="item.id"
                       >
                         <td v-text="index + 1"></td>
-                        <td v-text="item.paid_date"></td>
+                        <td>{{formatDate(item.paid_date)}}</td>
                         <td v-text="item.invoice"></td>
                         <td
                           v-text="formatCurrency(item.principal_paid, '$')"
                         ></td>
                         <td
                           v-text="formatCurrency(item.interest_paid, '$')"
-                        ></td>
-                        <td
-                          v-text="formatCurrency(item.penalty_paid, '$')"
                         ></td>
                         <td v-text="formatCurrency(item.fee_paid, '$')"></td>
                         <td
@@ -317,7 +317,12 @@
                             )
                           "
                         ></td>
-                        <td v-if="item.status == 'Close'">Paid</td>
+                        <td
+                          v-if="item.status == 'Close'"
+                          class="font-weight-bold text-success"
+                        >
+                          Paid
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -331,7 +336,7 @@
                 <card shadow type="secondary">
                   <form action="" method="post" id="frm-pay">
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6 mb-3">
                         <label for="payment">Principal</label>
                         <div class="form-control-alternative">
                           <input
@@ -404,25 +409,24 @@
                         <th scope="">Invoice Number</th>
                         <th scope="">Principal</th>
                         <th scope="">Interest</th>
-                        <th scope="">Penalty</th>
                         <th scope="">Fee</th>
                         <th scope="">Total</th>
                         <th scope="">Status</th>
                       </tr>
                     </thead>
-                    <tbody v-for="(item, index) in schedulePaidData" :key="item.id">
+                    <tbody
+                      v-for="(item, index) in schedulePaidData"
+                      :key="item.id"
+                    >
                       <tr v-if="item.status == 'Paid Off'">
                         <td v-text="index + 1"></td>
-                        <td v-text="item.paid_date"></td>
+                        <td>{{formatDate(item.paid_date)}}</td>
                         <td v-text="item.invoice"></td>
                         <td
                           v-text="formatCurrency(item.principal_paid, '$')"
                         ></td>
                         <td
                           v-text="formatCurrency(item.interest_paid, '$')"
-                        ></td>
-                        <td
-                          v-text="formatCurrency(item.penalty_paid, '$')"
                         ></td>
                         <td v-text="formatCurrency(item.fee_paid, '$')"></td>
                         <td
@@ -436,7 +440,12 @@
                             )
                           "
                         ></td>
-                        <td v-if="item.status == 'Paid Off'">Paid Off</td>
+                        <td
+                          v-if="item.status == 'Paid Off'"
+                          class="font-weight-bold text-success"
+                        >
+                          Paid Off
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -452,6 +461,7 @@
 <script>
 import httpAxios from "@/utils/http-axios";
 import $ from "jquery";
+import moment from 'moment';
 
 export default {
   name: "Show",
@@ -478,6 +488,9 @@ export default {
     },
     setActive(menuItem) {
       this.activeItem = menuItem;
+    },
+    formatDate(date) {
+      return moment(date).format("DD-MM.YYYY");
     },
     formatCurrency(value, symbol, $sign = true) {
       if (!$.isNumeric(value)) {

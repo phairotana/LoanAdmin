@@ -57,13 +57,16 @@
                       <td
                         v-text="item.cus_firstname + ' ' + item.cus_lastname"
                       ></td>
-                      <td v-text="item.balance"></td>
+                      <td>{{ formatCurrency(item.balance, "$") }}</td>
                       <td v-text="item.duration"></td>
                       <td v-text="item.repayment_method"></td>
-                      <td v-text="item.interest_rate"></td>
-                      <td v-text="item.fee_rate"></td>
-                      <td v-text="item.dis_date"></td>
-                      <td v-text="item.status"></td>
+                      <td v-text="item.interest_rate + ' %'"></td>
+                      <td v-text="item.fee_rate + ' %'"></td>
+                      <td>{{formatDate(item.dis_date)}}</td>
+                      <td
+                        v-text="item.status"
+                        class="font-weight-bold text-success"
+                      ></td>
                       <td>
                         <router-link
                           v-bind:to="'/disbursed/' + item.dis_id + '/show'"
@@ -95,6 +98,8 @@
 
 <script>
 import httpAxios from "@/utils/http-axios";
+import $ from "jquery";
+import moment from 'moment';
 
 export default {
   name: "List disbursed",
@@ -107,6 +112,22 @@ export default {
     this.getDisbursed();
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format("DD-MM.YYYY");
+    },
+    formatCurrency(value, symbol, $sign = true) {
+      if (!$.isNumeric(value)) {
+        value = 0;
+      }
+      if (symbol === "$") {
+        let val = (value / 1).toFixed(2).replace(",", ".");
+        if ($sign) {
+          return "$" + val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        } else {
+          return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      }
+    },
     getDisbursed() {
       var self = this;
       httpAxios
@@ -123,17 +144,19 @@ export default {
       httpAxios
         .delete("disbursement/" + dis_id)
         .then(function () {
+          if (response.data.success) {
+            self.$notify({
+              type: "success",
+              text: "Disbursement has been deleted!",
+            });
+          }
           self.getDisbursed();
-          self.$swal({
-            position: "top-end",
-            icon: "success",
-            title: "This loan has been deleted successfuuly!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
         })
         .catch(function (error) {
-          console.log(error.message);
+          self.$notify({
+            type: "error",
+            text: "Delete disbursement failed!",
+          });
         });
     },
   },

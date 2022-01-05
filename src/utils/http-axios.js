@@ -3,24 +3,24 @@ import axios from 'axios';
 import store from '@/store';
 // Create
 const service = axios.create({
-  baseURL: 'http://localhost:8000/',
-  // baseURL: 'https://global-loan.herokuapp.com/',
+  baseURL: "http://localhost:8000/",
+  // baseURL: "https://global-loan.herokuapp.com/",
 });
 
 // Token
 if (store.getters.getLoggedUser) {
-  service.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.getLoggedUser.access_token;
+  service.defaults.headers.common["Authorization"] = "Bearer " + store.getters.getLoggedUser.access_token;
 }
 
 // Request Interceptor
 service.interceptors.request.use(
   (config) => {
-    store.dispatch('displayLoader', true);
+    store.dispatch("displayLoader", true);
 
     return config;
   },
   (error) => {
-    store.dispatch('displayLoader', false);
+    store.dispatch("displayLoader", false);
 
     return Promise.reject(error);
   },
@@ -29,12 +29,12 @@ service.interceptors.request.use(
 // Response Interceptor
 service.interceptors.response.use(
   (response) => {
-    store.dispatch('displayLoader', false);
+    store.dispatch("displayLoader", false);
 
     return response;
   },
   (error) => {
-    store.dispatch('displayLoader', false);
+    store.dispatch("displayLoader", false);
 
     var errors = error;
 
@@ -42,15 +42,15 @@ service.interceptors.response.use(
       // Session Expired
       if (401 === error.response.status) {
         errors = error.response.data.message;
-        // store.dispatch('logOut');
+        // store.dispatch("logOut");
       }
 
       // Errors from backend
       if (error.response.status == 422) {
-        errors = '';
+        errors = "";
         for (var errorKey in error.response.data.errors) {
-          errors += '\n';
-          errors += error.response.data.errors[errorKey].detail + '<br>';
+          errors += "\n";
+          errors += error.response.data.errors[errorKey].detail + "<br>";
         }
       }
 
@@ -66,10 +66,7 @@ service.interceptors.response.use(
 
       // 404
       if (error.response.status == 404) {
-        errors = 'Page not found!';
-      }
-      if(error.response.status == 401){
-        // route.push({path: "/login"})
+        errors = "Page not found!";
       }
     }
 
