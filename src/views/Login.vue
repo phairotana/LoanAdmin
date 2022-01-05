@@ -6,7 +6,7 @@
           <div class="text-center text-muted mb-4">
             <h3>Sign In</h3>
           </div>
-          <form role="form">
+          <form role="form" @submit.prevent="login">
             <div
               class="form-group"
               :class="{ error: v$.username.$errors.length }"
@@ -63,9 +63,9 @@
               <span class="text-muted">Remember me</span>
             </base-checkbox>
             <div class="text-center">
-              <base-button type="primary" @click="login()" class="my-4">
+              <button type="submit" class="my-4 btn btn-primary">
                 Sign in
-              </base-button>
+              </button>
             </div>
           </form>
         </div>
@@ -117,14 +117,17 @@ export default {
       const formData = new FormData();
       formData.append("username", self.username);
       formData.append("password", self.password);
-      const is_save = await httpAxios.post("login", formData);
-
-      if (is_save.success) {
+      const response = await httpAxios
+        .post("login", formData)
+        .catch(function (error) {
+          if (error.response.status == 401) {
+            self.$notify({ type: "error ", text: "Login failed!" });
+          }
+        });
+      if (response.status == 200) {
         self.$notify({ type: "success", text: "Login Successfully!" });
-        self.$store.commit("LOGGED_USER", is_save.data);
+        self.$store.commit("LOGGED_USER", response.data);
         self.$router.push("/dashboard");
-      } else {
-        self.$notify({ type: "error ", text: "Login failed!" });
       }
     },
   },

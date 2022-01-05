@@ -6,7 +6,7 @@
           <div class="text-center text-muted mb-4">
             <h3>Create New Account</h3>
           </div>
-          <form role="form">
+          <form role="form" @submit.passive="register">
             <div class="form-group">
               <base-input
                 autocomplete
@@ -99,11 +99,10 @@
               </div>
             </div>
             <div class="text-center">
-              <base-button
-                v-on:click="register()"
-                type="primary"
-                class="my-4"
-                >Create account</base-button
+              <button
+                type="submit"
+                class="my-4 btn btn-primary"
+                >Create account</button
               >
             </div>
           </form>
@@ -170,7 +169,8 @@ export default {
     };
   },
   methods: {
-    async register() {
+    async register(e) {
+      e.preventDefault();
       const is_save = await httpAxios.post("register", this.registerData);
       if (is_save.success) {
         this.$notify({ type: "success", text: "The operation completed" });
