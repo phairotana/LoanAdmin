@@ -6,7 +6,7 @@
           <div class="text-center text-muted mb-4">
             <h3>Create New Account</h3>
           </div>
-          <form role="form" @submit.passive="register">
+          <form role="form" @submit.prevent="register">
             <div class="form-group">
               <base-input
                 autocomplete
@@ -99,11 +99,9 @@
               </div>
             </div>
             <div class="text-center">
-              <button
-                type="submit"
-                class="my-4 btn btn-primary"
-                >Create account</button
-              >
+              <button type="submit" class="my-4 btn btn-primary">
+                Create account
+              </button>
             </div>
           </form>
         </div>
@@ -169,14 +167,15 @@ export default {
     };
   },
   methods: {
-    async register(e) {
-      e.preventDefault();
-      const is_save = await httpAxios.post("register", this.registerData);
-      if (is_save.success) {
-        this.$notify({ type: "success", text: "The operation completed" });
+    async register() {
+      const response = await httpAxios
+        .post("register", this.registerData)
+        .catch(function () {
+          this.$notify({ type: "error ", text: "Register account failed!" });
+        });
+      if (response.status == 200) {
+        this.$notify({ type: "success", text: "Register account successfully!" });
         this.$router.push("/login");
-      } else {
-        this.$notify({ type: "error ", text: "Register account failed!" });
       }
     },
   },

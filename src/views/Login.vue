@@ -119,10 +119,8 @@ export default {
       formData.append("password", self.password);
       const response = await httpAxios
         .post("login", formData)
-        .catch(function (error) {
-          if (error.response.status == 401) {
-            self.$notify({ type: "error ", text: "Login failed!" });
-          }
+        .catch(function () {
+          self.$notify({ type: "error ", text: "Login failed!" });
         });
       if (response.status == 200) {
         self.$notify({ type: "success", text: "Login Successfully!" });
