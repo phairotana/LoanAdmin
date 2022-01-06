@@ -3,8 +3,8 @@ import axios from 'axios';
 import store from '@/store';
 // Create
 const service = axios.create({
-  baseURL: "http://localhost:8000/",
-  // baseURL: "https://global-loan.herokuapp.com/",
+  // baseURL: "http://localhost:8000/",
+  baseURL: "https://global-loan.herokuapp.com/",
 });
 
 // Token
