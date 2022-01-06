@@ -212,7 +212,7 @@ const fetchCustomer = async (query) => {
         })
       );
   }
-  const response = await fetch("http://localhost:8000/customer?" + where, {
+  const response = await fetch("https://global-loan.herokuapp.com/customer?" + where, {
     headers: {
       "Content-Type": "application/json",
       "x-access-token": "token-value",
