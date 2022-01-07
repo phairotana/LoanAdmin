@@ -67,4 +67,5 @@
 // Vendor (Plugins)
 
 @import "custom/vendors";
-@import "/node_modules/@vueform/multiselect/themes/default.scss"
+@import "custom/mycustom";
+@import "/node_modules/@vueform/multiselect/themes/default.scss";

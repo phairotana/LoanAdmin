@@ -26,7 +26,7 @@
               </div>
             </div>
           </template>
-          <form>
+          <form class="add-customer">
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-6">
@@ -47,16 +47,13 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                   <label for="Gender">Gender</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="cusData.gender"
-                  >
-                    <option value=""></option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
+                    v-model="selectGender.value"
+                    v-bind="selectGender"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -70,12 +67,10 @@
               </div>
               <div class="row">
                 <div class="col-lg-6">
-                  <base-input
-                    alternative=""
-                    label="Phone"
-                    input-classes="form-control-alternative"
-                    v-model="cusData.phone"
-                  />
+                  <label for="Phone">Phone</label>
+                  <vue-tel-input
+                    class="form-control form-control-alternative"
+                  ></vue-tel-input>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -88,20 +83,18 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                   <label for="Nationality">Nationality</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="cusData.nationality"
-                  >
-                    <option value=""></option>
-                    <option value="Male">Khmer</option>
-                    <option value="Female">Chinese</option>
-                  </select>
+                    v-model="selectNationality.value"
+                    v-bind="selectNationality"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <base-input
                     alternative=""
+                    type="text"
                     label="Cccupation"
                     input-classes="form-control-alternative"
                     v-model="cusData.occupation"
@@ -111,33 +104,31 @@
               <div class="row">
                 <div class="col-lg-6">
                   <base-input
+                    type="number"
                     alternative=""
                     label="Income"
                     input-classes="form-control-alternative"
-                    v-model="cusData.income"
+                    v-model.number="cusData.income"
                   />
                 </div>
                 <div class="col-lg-6">
                   <base-input
+                    type="number"
                     alternative=""
                     label="Expense"
                     input-classes="form-control-alternative"
-                    v-model="cusData.expense"
+                    v-model.number="cusData.expense"
                   />
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                   <label for="Identity Type">Identity Type</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="cusData.identity_type"
-                  >
-                    <option value=""></option>
-                    <option value="ID Card">ID Card</option>
-                    <option value="Passport">Passport</option>
-                    <option value="Family Book">Family Book</option>
-                  </select>
+                    v-model="identityType.value"
+                    v-bind="identityType"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -215,10 +206,11 @@
                 <em class="fas fa-save"></em>
                 Save
               </button>
-              <button 
+              <button
                 v-on:click="onCancel"
-                type="button" 
-                class="btn btn-secondary">
+                type="button"
+                class="btn btn-secondary"
+              >
                 <em class="fas fa-window-close"></em>
                 Cancel
               </button>
@@ -231,21 +223,36 @@
 </template>
 <script>
 import httpAxios from "@/utils/http-axios";
+import Multiselect from "@vueform/multiselect";
+import $ from "jquery";
 
 export default {
   name: "newcustomer",
+  components: {
+    Multiselect,
+  },
   data() {
     return {
+      selectGender: {
+        value: 0,
+        options: ["Male", "Female"],
+      },
+      selectNationality: {
+        value: 0,
+        options: ["Khmer", "Chinese"],
+      },
+      identityType: {
+        value: 0,
+        options: ["ID Card", "Passport", "Family Book"],
+      },
       cusData: {
         first_name: "",
         last_name: "",
         dob: "",
-        phone: "",
         email: "",
-        nationality: "",
-        income: "",
-        expense: "",
-        identity_type: "",
+        income: 0,
+        expense: 0,
+        occupation: "",
         identity_number: "",
         issue_date: "",
         issue_expired_date: "",
@@ -258,18 +265,40 @@ export default {
   },
   methods: {
     async createCustomer() {
-      const isSave = await httpAxios.post("customer", this.cusData);
-      if (isSave) {
-        this.$swal({
-          position: "top-end",
-          icon: "success",
-          title: "The customer create successfully!!",
-          showConfirmButton: false,
-          timer: 1500,
+      const submitData = {
+        first_name: this.cusData.first_name,
+        last_name: this.cusData.last_name,
+        gender: this.selectGender.value,
+        dob: this.cusData.dob,
+        phone: $(".vti__input").val(),
+        email: this.cusData.email,
+        income: this.cusData.income,
+        expense: this.cusData.expense,
+        nationality: this.selectNationality.value,
+        occupation: this.cusData.occupation,
+        identity_type: this.identityType.value,
+        identity_number: this.cusData.identity_number,
+        issue_date: this.cusData.issue_date,
+        issue_expired_date: this.cusData.issue_expired_date,
+        no_number: this.cusData.no_number,
+        street_no: this.cusData.street_no,
+        address: this.cusData.address,
+        profile_im: this.cusData.phone,
+      };
+      const response = await httpAxios
+        .post("customer", submitData)
+        .catch(function (error) {
+          this.$notify({ type: "error ", text: "Creating customer failed!" });
         });
+      if (response.data.success) {
+        this.$notify({
+          type: "success",
+          text: "Creating customer successfully!",
+        });
+        this.$router.push("/customer");
+      } else {
+        this.$notify({ type: "error ", text: "Creating customer failed!" });
       }
-
-      this.$router.push("/customer");
     },
     onCancel() {
       this.show = false;
@@ -278,12 +307,3 @@ export default {
   },
 };
 </script>
-<style>
-.col-xl-12,
-.col-xl,
-.col-xl-auto {
-  position: relative;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-</style>
