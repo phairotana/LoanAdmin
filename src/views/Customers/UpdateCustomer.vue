@@ -26,7 +26,7 @@
               </div>
             </div>
           </template>
-          <form>
+          <form class="add-customer">
             <div class="pl-lg-4">
               <div class="row">
                 <div class="col-lg-6">
@@ -34,29 +34,58 @@
                     alternative=""
                     label="Frist Name"
                     input-classes="form-control-alternative"
-                    v-model="cusData.first_name"
-                  />
+                    v-model="v$.cusData.first_name.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.first_name.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
                     alternative=""
                     label="Last Name"
                     input-classes="form-control-alternative"
-                    v-model="cusData.last_name"
-                  />
+                    v-model="v$.cusData.last_name.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.last_name.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
-                  <label for="Gender">Gender</label>
-                  <select
+                <div class="col-lg-6 mb-4">
+                  <label class="font-weight-bold" for="Gender">Gender</label>
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="cusData.gender"
+                    v-model="v$.selectGender.value.$model"
+                    v-bind="selectGender"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectGender.value.$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -64,44 +93,64 @@
                     alternative=""
                     label="Date of Birth"
                     input-classes="form-control-alternative"
-                    v-model="cusData.dob"
-                  />
+                    v-model="v$.cusData.dob.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.dob.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6">
-                  <base-input
-                    alternative=""
-                    label="Phone"
-                    input-classes="form-control-alternative"
-                    v-model="cusData.phone"
-                  />
+                  <label class="font-weight-bold" for="Phone">Phone</label>
+                  <vue-tel-input
+                    class="form-control form-control-alternative"
+                  ></vue-tel-input>
                 </div>
                 <div class="col-lg-6">
                   <base-input
                     type="email"
                     alternative=""
-                    label="Email"
+                    label="Email Address"
                     input-classes="form-control-alternative"
-                    v-model="cusData.email"
-                  />
+                    v-model="v$.cusData.email.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.email.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
-                  <label for="Nationality">Nationality</label>
-                  <select
-                    class="form-control form-control-alternative"
-                    v-model="cusData.nationality"
+                <div class="col-lg-6 mb-4">
+                  <label class="font-weight-bold" for="Nationality"
+                    >Nationality</label
                   >
-                    <option value=""></option>
-                    <option value="Male">Khmer</option>
-                    <option value="Female">Chinese</option>
-                  </select>
+                  <Multiselect
+                    class="form-control form-control-alternative"
+                    v-model="selectNationality.value"
+                    v-bind="selectNationality"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <base-input
                     alternative=""
+                    type="text"
                     label="Cccupation"
                     input-classes="form-control-alternative"
                     v-model="cusData.occupation"
@@ -111,33 +160,31 @@
               <div class="row">
                 <div class="col-lg-6">
                   <base-input
+                    type="number"
                     alternative=""
                     label="Income"
                     input-classes="form-control-alternative"
-                    v-model="cusData.income"
+                    v-model.number="cusData.income"
                   />
                 </div>
                 <div class="col-lg-6">
                   <base-input
+                    type="number"
                     alternative=""
                     label="Expense"
                     input-classes="form-control-alternative"
-                    v-model="cusData.expense"
+                    v-model.number="cusData.expense"
                   />
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 mb-4">
                   <label for="Identity Type">Identity Type</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="cusData.identity_type"
-                  >
-                    <option value=""></option>
-                    <option value="ID Card">ID Card</option>
-                    <option value="Passport">Passport</option>
-                    <option value="Family Book">Family Book</option>
-                  </select>
+                    v-model="identityType.value"
+                    v-bind="identityType"
+                  ></Multiselect>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -164,7 +211,7 @@
                     type="date"
                     label="Issue Expired Date"
                     input-classes="form-control-alternative"
-                    v-model="cusData.issue_expired_date"
+                    v-model="cusData.issue_expired"
                   />
                 </div>
               </div>
@@ -175,7 +222,7 @@
                     alternative=""
                     label="House Number"
                     input-classes="form-control-alternative"
-                    v-model="cusData.no_number"
+                    v-model="cusData.house_no"
                   />
                 </div>
                 <div class="col-lg-6">
@@ -208,8 +255,8 @@
                 </div>
               </div>
               <button
-                type="button"
                 @click="updateCustomer()"
+                type="button"
                 class="btn btn-primary"
               >
                 <em class="fas fa-save"></em>
@@ -230,27 +277,56 @@
     </div>
   </div>
 </template>
+
 <script>
 import httpAxios from "@/utils/http-axios";
+import Multiselect from "@vueform/multiselect";
+import $ from "jquery";
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+
+export function validName(name) {
+  let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validNamePattern.test(name)) {
+    return true;
+  }
+  return false;
+}
 
 export default {
   name: "Update Customer",
+  components: {
+    Multiselect,
+  },
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
+      selectGender: {
+        value: null,
+        options: ["Male", "Female"],
+      },
+      selectNationality: {
+        value: null,
+        options: ["Khmer", "Chinese"],
+      },
+      identityType: {
+        value: null,
+        options: ["ID Card", "Passport", "Family Book"],
+      },
       cusData: {
         first_name: "",
         last_name: "",
         dob: "",
-        phone: "",
         email: "",
-        nationality: "",
-        income: "",
-        expense: "",
-        identity_type: "",
+        income: 0,
+        expense: 0,
+        occupation: "",
         identity_number: "",
         issue_date: "",
-        issue_expired_date: "",
-        no_number: "",
+        issue_expired: "",
+        house_no: "",
         street_no: "",
         address: "",
         profile_im: "",
@@ -260,27 +336,79 @@ export default {
   mounted() {
     this.getCusById();
   },
+  validations() {
+    return {
+      selectGender: {
+        value: { required },
+      },
+      cusData: {
+        first_name: {
+          required,
+          name_validation: {
+            $validator: validName,
+            $message:
+              "Invalid Name. Valid name only contain letters, dashes (-) and spaces",
+          },
+        },
+        last_name: {
+          required,
+          name_validation: {
+            $validator: validName,
+            $message:
+              "Invalid Name. Valid name only contain letters, dashes (-) and spaces",
+          },
+        },
+        dob: { required },
+        email: { required, email },
+      },
+    };
+  },
   methods: {
     async getCusById() {
       const self = this;
       const result = await httpAxios.get("customer/" + self.$route.params.id);
       self.cusData = result.data;
+      // self.selectGender = result.data.gender;
+      // self.selectNationality = result.data;
+      // self.identityType = result.data.identity_type;
     },
     async updateCustomer() {
-      const self = this;
-      const result = await httpAxios.put(
-        "customer/" + self.$route.params.id,
-        self.cusData
-      );
-      if (result.data.success) {
-        this.$swal({
-          position: "top-end",
-          icon: "success",
-          title: "The customer has been updated",
-          showConfirmButton: false,
-          timer: 1500,
+      var vm = this;
+      vm.v$.selectGender.$touch();
+      vm.v$.cusData.$touch();
+      const submitData = {
+        first_name: vm.cusData.first_name,
+        last_name: vm.cusData.last_name,
+        gender: vm.selectGender.value,
+        dob: vm.cusData.dob,
+        phone: $(".vti__input").val(),
+        email: vm.cusData.email,
+        income: vm.cusData.income,
+        expense: vm.cusData.expense,
+        nationality: vm.selectNationality.value,
+        occupation: vm.cusData.occupation,
+        identity_type: vm.identityType.value,
+        identity_number: vm.cusData.identity_number,
+        issue_date: vm.cusData.issue_date,
+        issue_expired: vm.cusData.issue_expired,
+        house_no: vm.cusData.house_no,
+        street_no: vm.cusData.street_no,
+        address: vm.cusData.address,
+        profile_im: vm.cusData.profile_im,
+      };
+      const response = await httpAxios
+        .put("customer/" + vm.$route.params.id, submitData)
+        .catch(function (error) {
+          vm.$notify({ type: "error ", text: "Updating customer failed!" });
         });
-        self.$router.push("/customer");
+      if (response.data.success) {
+        vm.$notify({
+          type: "success",
+          text: "Updating customer successfully!",
+        });
+        vm.$router.push("/customer");
+      } else {
+        vm.$notify({ type: "error ", text: "Updating customer failed!" });
       }
     },
     onCancel() {
@@ -290,12 +418,3 @@ export default {
   },
 };
 </script>
-<style>
-.col-xl-12,
-.col-xl,
-.col-xl-auto {
-  position: relative;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-</style>

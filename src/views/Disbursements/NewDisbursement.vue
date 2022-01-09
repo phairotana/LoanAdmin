@@ -32,20 +32,38 @@
                 <div class="col-lg-6 mb-4">
                   <label for="Product Name">Customer</label>
                   <Multiselect
-                    v-model="selectCusName.value"
+                    class="form-control form-control-alternative"
+                    v-model="v$.selectCusName.value.$model"
                     v-bind="selectCusName"
                   ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectCusName.value.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <label for="Product Name">Product Name</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="disbursementData.product_type"
+                    v-model="v$.selectProduct.value.$model"
+                    v-bind="selectProduct"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectProduct.value.$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="Personal">Personal</option>
-                    <option value="Representative">Representative</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -55,19 +73,38 @@
                     alternative=""
                     label="Disbursed Amount"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.balance"
-                  />
+                    v-model="v$.disbursementData.balance.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.balance
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <label for="Currency">Currency</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="disbursementData.currency"
+                    v-model="v$.selectCurrency.value.$model"
+                    v-bind="selectCurrency"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectCurrency.value.$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="USD">USD</option>
-                    <option value="Riel">Riel</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -77,20 +114,39 @@
                     label="Duration"
                     type="number"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.duration"
-                  />
+                    v-model="v$.disbursementData.duration.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.duration
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <label for="Interest Period">Duration Period</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="disbursementData.duration_period"
+                    v-model="v$.selectDurationPeriod.value.$model"
+                    v-bind="selectDurationPeriod"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectDurationPeriod.value
+                      .$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="Month">Monthly</option>
-                    <option value="Year">Yearly</option>
-                    <option value="Week">Weekly</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -100,20 +156,39 @@
                     label="Interest Rate (%)"
                     type="number"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.interest_rate"
-                  />
+                    v-model="v$.disbursementData.interest_rate.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.interest_rate
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <label for="Interest Period">Interest Period</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="disbursementData.interest_period"
+                    v-model="v$.selectInterestPeriod.value.$model"
+                    v-bind="selectInterestPeriod"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectInterestPeriod.value
+                      .$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="Month">Monthly</option>
-                    <option value="Year">Yearly</option>
-                    <option value="Week">Weekly</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -123,8 +198,20 @@
                     type="number"
                     label="Fee Rate (%)"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.fee_rate"
-                  />
+                    v-model="v$.disbursementData.fee_rate.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.fee_rate
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -132,21 +219,41 @@
                     alternative=""
                     label="Frequency"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.frequency"
-                  />
+                    v-model="v$.disbursementData.frequency.$model"
+                  >
+                  </base-input>
+                           <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.frequency
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6">
                   <label for="Nationality">Repayment Method</label>
-                  <select
+                  <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="disbursementData.repayment_method"
+                    v-model="v$.selectRepaymentMethod.value.$model"
+                    v-bind="selectRepaymentMethod"
+                  ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectRepaymentMethod.value
+                      .$errors"
+                    :key="index"
                   >
-                    <option value=""></option>
-                    <option value="Balloon">Balloon</option>
-                    <option value="Bullet">Bullet</option>
-                  </select>
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -154,8 +261,20 @@
                     type="date"
                     label="Disbursed Date"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.dis_date"
-                  />
+                    v-model="v$.disbursementData.dis_date.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.dis_date
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
@@ -165,8 +284,20 @@
                     type="date"
                     label="First Payment Date"
                     input-classes="form-control-alternative"
-                    v-model="disbursementData.first_date"
-                  />
+                    v-model="v$.disbursementData.first_date.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.disbursementData.first_date
+                      .$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <button
@@ -196,6 +327,9 @@
 import httpAxios from "@/utils/http-axios";
 import Multiselect from "@vueform/multiselect";
 import store from "@/store";
+import $ from "jquery";
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 const fetchCustomer = async (query) => {
   let where = "";
@@ -212,7 +346,7 @@ const fetchCustomer = async (query) => {
         })
       );
   }
-  const response = await fetch("https://global-loan.herokuapp.com/customer?" + where, {
+  const response = await fetch("http://localhost:8000/customer?" + where, {
     headers: {
       "Content-Type": "application/json",
       "x-access-token": "token-value",
@@ -230,8 +364,31 @@ export default {
   components: {
     Multiselect,
   },
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
+      selectProduct: {
+        value: null,
+        options: ["Personal", "Representative"],
+      },
+      selectCurrency: {
+        value: null,
+        options: ["USD", "RIEL"],
+      },
+      selectDurationPeriod: {
+        value: null,
+        options: ["Monthy", "Yearly"],
+      },
+      selectInterestPeriod: {
+        value: null,
+        options: ["Monthy", "Yearly"],
+      },
+      selectRepaymentMethod: {
+        value: null,
+        options: ["Balloon", "Bullet"],
+      },
       selectCusName: {
         value: null,
         placeholder: "Choose a customer",
@@ -246,11 +403,8 @@ export default {
       },
       disbursementData: {
         product_type: "",
-        repayment_method: "",
         interest_rate: "",
         balance: "",
-        duration_period: "",
-        interest_period: "",
         currency: "",
         frequency: "",
         duration: "",
@@ -260,35 +414,74 @@ export default {
       },
     };
   },
+  validations() {
+    return {
+      selectCusName: {
+        value: { required },
+      },
+      selectProduct: {
+        value: { required },
+      },
+      selectCurrency: {
+        value: { required },
+      },
+      selectDurationPeriod: {
+        value: { required },
+      },
+      selectInterestPeriod: {
+        value: { required },
+      },
+      selectRepaymentMethod: {
+        value: { required },
+      },
+      disbursementData: {
+        balance: { required },
+        duration: { required },
+        interest_rate: { required },
+        frequency: { required },
+        fee_rate: { required },
+        dis_date: { required },
+        first_date: { required },
+      },
+    };
+  },
   methods: {
     async createDisbursement() {
+      var vm = this;
+      vm.v$.selectCusName.$touch();
+      vm.v$.selectProduct.$touch();
+      vm.v$.selectCurrency.$touch();
+      vm.v$.selectDurationPeriod.$touch();
+      vm.v$.selectInterestPeriod.$touch();
+      vm.v$.selectRepaymentMethod.$touch();
+      vm.v$.disbursementData.$touch();
       const response = await httpAxios
         .post("disbursement", {
-          cus_id: this.selectCusName.value,
-          product_type: this.disbursementData.product_type,
-          repayment_method: this.disbursementData.repayment_method,
-          interest_rate: this.disbursementData.interest_rate,
-          balance: this.disbursementData.balance,
-          duration_period: this.disbursementData.duration_period,
-          interest_period: this.disbursementData.interest_period,
-          currency: this.disbursementData.currency,
-          frequency: this.disbursementData.frequency,
-          duration: this.disbursementData.duration,
-          fee_rate: this.disbursementData.fee_rate,
-          dis_date: this.disbursementData.dis_date,
-          first_date: this.disbursementData.first_date,
+          cus_id: vm.selectCusName.value,
+          product_type: vm.selectProduct.value,
+          repayment_method: vm.selectRepaymentMethod.value,
+          interest_rate: vm.disbursementData.interest_rate,
+          balance: vm.disbursementData.balance,
+          duration_period: vm.selectDurationPeriod.value,
+          interest_period: vm.selectInterestPeriod.value,
+          currency: vm.selectCurrency.value,
+          frequency: vm.disbursementData.frequency,
+          duration: vm.disbursementData.duration,
+          fee_rate: vm.disbursementData.fee_rate,
+          dis_date: vm.disbursementData.dis_date,
+          first_date: vm.disbursementData.first_date,
         })
         .catch(function (error) {
-          this.$notify({ type: "error ", text: "Create disbursement failed!" });
+          vm.$notify({ type: "error ", text: "Create disbursement failed!" });
         });
       if (response.data.success) {
-        this.$notify({
+        vm.$notify({
           type: "success",
           text: "The Loan create successfully!",
         });
-        this.$router.push("/disbursed");
+        vm.$router.push("/disbursed");
       } else {
-        this.$notify({ type: "error ", text: "Create disbursement failed!" });
+        vm.$notify({ type: "error ", text: "Create disbursement failed!" });
       }
     },
     onCancel() {
@@ -298,12 +491,3 @@ export default {
   },
 };
 </script>
-<style>
-.col-xl-12,
-.col-xl,
-.col-xl-auto {
-  position: relative;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-</style>

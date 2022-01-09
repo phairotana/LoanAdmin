@@ -34,26 +34,58 @@
                     alternative=""
                     label="Frist Name"
                     input-classes="form-control-alternative"
-                    v-model="cusData.first_name"
-                  />
+                    v-model="v$.cusData.first_name.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.first_name.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
                     alternative=""
                     label="Last Name"
                     input-classes="form-control-alternative"
-                    v-model="cusData.last_name"
-                  />
+                    v-model="v$.cusData.last_name.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.last_name.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 mb-4">
-                  <label for="Gender">Gender</label>
+                  <label class="font-weight-bold" for="Gender">Gender</label>
                   <Multiselect
                     class="form-control form-control-alternative"
-                    v-model="selectGender.value"
+                    v-model="v$.selectGender.value.$model"
                     v-bind="selectGender"
                   ></Multiselect>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.selectGender.value.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
                 <div class="col-lg-6">
                   <base-input
@@ -61,13 +93,24 @@
                     alternative=""
                     label="Date of Birth"
                     input-classes="form-control-alternative"
-                    v-model="cusData.dob"
-                  />
+                    v-model="v$.cusData.dob.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.dob.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6">
-                  <label for="Phone">Phone</label>
+                  <label class="font-weight-bold" for="Phone">Phone</label>
                   <vue-tel-input
                     class="form-control form-control-alternative"
                   ></vue-tel-input>
@@ -76,15 +119,28 @@
                   <base-input
                     type="email"
                     alternative=""
-                    label="Email"
+                    label="Email Address"
                     input-classes="form-control-alternative"
-                    v-model="cusData.email"
-                  />
+                    v-model="v$.cusData.email.$model"
+                  >
+                  </base-input>
+                  <!-- Error Message -->
+                  <div
+                    class="input-errors"
+                    v-for="(error, index) of v$.cusData.email.$errors"
+                    :key="index"
+                  >
+                    <div class="error-msg text-danger text-sm">
+                      {{ error.$message }}
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="row">
                 <div class="col-lg-6 mb-4">
-                  <label for="Nationality">Nationality</label>
+                  <label class="font-weight-bold" for="Nationality"
+                    >Nationality</label
+                  >
                   <Multiselect
                     class="form-control form-control-alternative"
                     v-model="selectNationality.value"
@@ -155,7 +211,7 @@
                     type="date"
                     label="Issue Expired Date"
                     input-classes="form-control-alternative"
-                    v-model="cusData.issue_expired_date"
+                    v-model="cusData.issue_expired"
                   />
                 </div>
               </div>
@@ -166,7 +222,7 @@
                     alternative=""
                     label="House Number"
                     input-classes="form-control-alternative"
-                    v-model="cusData.no_number"
+                    v-model="cusData.house_no"
                   />
                 </div>
                 <div class="col-lg-6">
@@ -199,8 +255,8 @@
                 </div>
               </div>
               <button
-                type="button"
                 @click="createCustomer()"
+                type="button"
                 class="btn btn-primary"
               >
                 <em class="fas fa-save"></em>
@@ -225,24 +281,37 @@
 import httpAxios from "@/utils/http-axios";
 import Multiselect from "@vueform/multiselect";
 import $ from "jquery";
+import useVuelidate from "@vuelidate/core";
+import { required, email } from "@vuelidate/validators";
+
+export function validName(name) {
+  let validNamePattern = new RegExp("^[a-zA-Z]+(?:[-'\\s][a-zA-Z]+)*$");
+  if (validNamePattern.test(name)) {
+    return true;
+  }
+  return false;
+}
 
 export default {
   name: "newcustomer",
   components: {
     Multiselect,
   },
+  setup() {
+    return { v$: useVuelidate() };
+  },
   data() {
     return {
       selectGender: {
-        value: 0,
+        value: null,
         options: ["Male", "Female"],
       },
       selectNationality: {
-        value: 0,
+        value: null,
         options: ["Khmer", "Chinese"],
       },
       identityType: {
-        value: 0,
+        value: null,
         options: ["ID Card", "Passport", "Family Book"],
       },
       cusData: {
@@ -255,49 +324,79 @@ export default {
         occupation: "",
         identity_number: "",
         issue_date: "",
-        issue_expired_date: "",
-        no_number: "",
+        issue_expired: "",
+        house_no: "",
         street_no: "",
         address: "",
         profile_im: "",
       },
     };
   },
+  validations() {
+    return {
+      selectGender: {
+        value: { required }
+      },
+      cusData: {
+        first_name: {
+          required,
+          name_validation: {
+            $validator: validName,
+            $message:
+              "Invalid Name. Valid name only contain letters, dashes (-) and spaces",
+          },
+        },
+        last_name: {
+          required,
+          name_validation: {
+            $validator: validName,
+            $message:
+              "Invalid Name. Valid name only contain letters, dashes (-) and spaces",
+          },
+        },
+        dob: { required },
+        email: { required, email },
+      },
+    };
+  },
   methods: {
     async createCustomer() {
+      var vm = this;
+      vm.v$.selectGender.$touch();
+      vm.v$.cusData.$touch();
       const submitData = {
-        first_name: this.cusData.first_name,
-        last_name: this.cusData.last_name,
-        gender: this.selectGender.value,
-        dob: this.cusData.dob,
+        first_name: vm.cusData.first_name,
+        last_name: vm.cusData.last_name,
+        gender: vm.selectGender.value,
+        dob: vm.cusData.dob,
         phone: $(".vti__input").val(),
-        email: this.cusData.email,
-        income: this.cusData.income,
-        expense: this.cusData.expense,
-        nationality: this.selectNationality.value,
-        occupation: this.cusData.occupation,
-        identity_type: this.identityType.value,
-        identity_number: this.cusData.identity_number,
-        issue_date: this.cusData.issue_date,
-        issue_expired_date: this.cusData.issue_expired_date,
-        no_number: this.cusData.no_number,
-        street_no: this.cusData.street_no,
-        address: this.cusData.address,
-        profile_im: this.cusData.phone,
+        email: vm.cusData.email,
+        income: vm.cusData.income,
+        expense: vm.cusData.expense,
+        nationality: vm.selectNationality.value,
+        occupation: vm.cusData.occupation,
+        identity_type: vm.identityType.value,
+        identity_number: vm.cusData.identity_number,
+        issue_date: vm.cusData.issue_date,
+        issue_expired: vm.cusData.issue_expired,
+        house_no: vm.cusData.house_no,
+        street_no: vm.cusData.street_no,
+        address: vm.cusData.address,
+        profile_im: vm.cusData.profile_im,
       };
       const response = await httpAxios
         .post("customer", submitData)
         .catch(function (error) {
-          this.$notify({ type: "error ", text: "Creating customer failed!" });
+          vm.$notify({ type: "error ", text: "Creating customer failed!" });
         });
       if (response.data.success) {
-        this.$notify({
+        vm.$notify({
           type: "success",
           text: "Creating customer successfully!",
         });
-        this.$router.push("/customer");
+        vm.$router.push("/customer");
       } else {
-        this.$notify({ type: "error ", text: "Creating customer failed!" });
+        vm.$notify({ type: "error ", text: "Creating customer failed!" });
       }
     },
     onCancel() {

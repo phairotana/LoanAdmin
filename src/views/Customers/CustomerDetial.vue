@@ -56,7 +56,7 @@
                 </td>
                 <td class="border-0" style="width: 5%">:</td>
                 <td class="border-0" style="width: 25%">
-                  {{ cusDetial.dob }}
+                  {{ formatDate(cusDetial.dob) }}
                 </td>
               </tr>
               <tr>
@@ -129,14 +129,14 @@
                 </td>
                 <td class="border-0" style="width: 5%">:</td>
                 <td class="border-0" style="width: 25%">
-                  {{ cusDetial.issue_date }}
+                  {{ formatDate(cusDetial.issue_date) }}
                 </td>
                 <td class="border-0 font-weight-bold" style="width: 20%">
                   Issue Expired Date
                 </td>
                 <td class="border-0" style="width: 5%">:</td>
                 <td class="border-0" style="width: 25%">
-                  {{ cusDetial.issue_expired_date }}
+                  {{ formatDate(cusDetial.issue_expired) }}
                 </td>
               </tr>
               <tr>
@@ -145,7 +145,7 @@
                 </td>
                 <td class="border-0" style="width: 5%">:</td>
                 <td class="border-0" style="width: 25%">
-                  {{ cusDetial.house_number }}
+                  {{ cusDetial.house_no }}
                 </td>
                 <td class="border-0 font-weight-bold" style="width: 20%">
                   Street Number
@@ -199,6 +199,7 @@
 
 <script>
 import httpAxios from "@/utils/http-axios";
+import moment from 'moment';
 
 export default {
   name: "Customer Detial",
@@ -209,6 +210,9 @@ export default {
     };
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format("DD-MM.YYYY");
+    },
     customerDetial() {
       httpAxios
         .get("customer/" + this.id)

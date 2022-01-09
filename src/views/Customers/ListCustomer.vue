@@ -21,7 +21,12 @@
             <div class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-12">
-                  <h3 class="mb-0">All Customers</h3>
+                  <router-link
+                    title="Add New"
+                    to="/new-customer"
+                    class="btn btn-primary btn-sm mb-2"
+                    ><em class="far fa-plus-square"></em
+                  ></router-link>
                 </div>
               </div>
               <table class="table table-striped">
@@ -41,7 +46,7 @@
                     <th scope="" v-text="index + 1"></th>
                     <td v-text="item.first_name + ' ' + item.last_name"></td>
                     <td v-text="item.gender"></td>
-                    <td v-text="item.dob"></td>
+                    <td v-text="formatDate(item.dob)"></td>
                     <td v-text="item.phone"></td>
                     <td v-text="item.email"></td>
                     <td>
@@ -77,6 +82,7 @@
 </template>
 <script>
 import httpAxios from "@/utils/http-axios";
+import moment from "moment";
 
 export default {
   name: "List Customer",
@@ -86,6 +92,9 @@ export default {
     };
   },
   methods: {
+    formatDate(date) {
+      return moment(date).format("DD-MM.YYYY");
+    },
     getCustomers() {
       var self = this;
       httpAxios
@@ -100,7 +109,7 @@ export default {
     deleteCustomer(cus_id) {
       var self = this;
       httpAxios
-      .delete("customer/" + cus_id)
+        .delete("customer/" + cus_id)
         .then(function () {
           self.getCustomers();
         })
