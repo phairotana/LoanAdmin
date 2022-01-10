@@ -29,50 +29,54 @@
                   ></router-link>
                 </div>
               </div>
-              <table class="table table-striped Disbursed-table-sticky">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Gender</th>
-                    <th scope="col">Date of Birth</th>
-                    <th scope="col">phone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(item, index) in cusList" :key="item.id">
-                    <th scope="" v-text="index + 1"></th>
-                    <td v-text="item.first_name + ' ' + item.last_name"></td>
-                    <td v-text="item.gender"></td>
-                    <td v-text="formatDate(item.dob)"></td>
-                    <td v-text="item.phone"></td>
-                    <td v-text="item.email"></td>
-                    <td>
-                      <router-link
-                        v-bind:to="'/customer/' + item.id + '/show'"
-                        class="btn btn-sm btn-info"
-                      >
-                        <em class="far fa-eye"></em>
-                      </router-link>
-                      <router-link
-                        v-bind:to="'/customer/' + item.id + '/edit'"
-                        class="btn btn-sm btn-primary"
-                      >
-                        <em class="far fa-edit"></em>
-                      </router-link>
-                      <button
-                        v-on:click="deleteCustomer(item.id)"
-                        class="btn btn-sm btn-danger"
-                        type="button"
-                      >
-                        <em class="far fa-trash-alt"></em>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div style="overflow-x: auto">
+                <table 
+                  class="table table-striped Disbursed-table-sticky"
+                  id="dtHorizontalExample">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Gender</th>
+                      <th scope="col">Date of Birth</th>
+                      <th scope="col">phone</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, index) in cusList" :key="item.id">
+                      <th scope="" v-text="index + 1"></th>
+                      <td v-text="item.first_name + ' ' + item.last_name"></td>
+                      <td v-text="item.gender"></td>
+                      <td v-text="formatDate(item.dob)"></td>
+                      <td v-text="item.phone"></td>
+                      <td v-text="item.email"></td>
+                      <td>
+                        <router-link
+                          v-bind:to="'/customer/' + item.id + '/show'"
+                          class="btn btn-sm btn-info"
+                        >
+                          <em class="far fa-eye"></em>
+                        </router-link>
+                        <router-link
+                          v-bind:to="'/customer/' + item.id + '/edit'"
+                          class="btn btn-sm btn-primary"
+                        >
+                          <em class="far fa-edit"></em>
+                        </router-link>
+                        <button
+                          v-on:click="deleteCustomer(item.id)"
+                          class="btn btn-sm btn-danger"
+                          type="button"
+                        >
+                          <em class="far fa-trash-alt"></em>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </template>
         </card>
