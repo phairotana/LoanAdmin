@@ -225,7 +225,9 @@
                       <tr class="text-nowrap">
                         <th scope="" colspan="8" class="pl-0 pb-0">
                           <router-link
-                            v-bind:to="'/disbursed/' + disDetial.id + '/print-schedule'"
+                            v-bind:to="
+                              '/disbursed/' + disDetial.id + '/print-schedule'
+                            "
                             class="btn btn-success btn-sm"
                             title="Preview Schedule"
                           >
@@ -281,13 +283,30 @@
                         ></td>
                       </tr>
                     </tbody>
-                    <tfoot class="thead-light">
-                      <tr class="text-nowrap">
-                        <th scope=""></th>
-                        <th scope=""></th>
-                        <th scope=""></th>
-                        <th scope=""></th>
-                        <th scope=""></th>
+                    <tfoot>
+                      <tr class="border-tb font-weight-bold text-center">
+                        <td colspan="3">Total</td>
+                        <td
+                          v-text="
+                            formatCurrency(totalSche.total_principal, '$')
+                          "
+                        ></td>
+                        <td
+                          v-text="formatCurrency(totalSche.total_interest, '$')"
+                        ></td>
+                        <td
+                          v-text="formatCurrency(totalSche.total_fee, '$')"
+                        ></td>
+                        <td
+                          v-text="
+                            formatCurrency(
+                              totalSche.total_interest +
+                                totalSche.total_fee +
+                                totalSche.total_principal,
+                              '$'
+                            )
+                          "
+                        ></td>
                       </tr>
                     </tfoot>
                   </table>
@@ -497,6 +516,7 @@ export default {
         amount: 0,
       },
       amountPayOff: {},
+      totalSche: {},
     };
   },
   created() {
@@ -536,6 +556,7 @@ export default {
           vm.customerDetial = response.data.data.customer;
           vm.amountPay = response.data.data.pay_now;
           vm.amountPayOff = response.data.data.pay_off;
+          vm.totalSche = response.data.data.total_sche;
         })
         .catch(function (error) {
           console.log(error.message);
