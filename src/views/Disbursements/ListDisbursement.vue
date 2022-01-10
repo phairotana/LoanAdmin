@@ -25,8 +25,8 @@
                     to="/new-disbursement"
                     class="btn btn-primary btn-sm mb-2"
                     title="Add New"
-                    ><em class="far fa-plus-square"></em></router-link
-                  >
+                    ><em class="far fa-plus-square"></em
+                  ></router-link>
                 </div>
               </div>
               <div style="overflow-x: auto">
@@ -61,12 +61,15 @@
                       ></td>
                       <td>{{ formatCurrency(item.balance, "$") }}</td>
                       <td v-text="item.currency"></td>
-                      <td v-text="item.duration + ' Months'" v-if="item.duration > 1"></td>
+                      <td
+                        v-text="item.duration + ' Months'"
+                        v-if="item.duration > 1"
+                      ></td>
                       <td v-text="item.duration + ' Month'" v-else></td>
                       <td v-text="item.repayment_method"></td>
                       <td v-text="item.interest_rate + ' %'"></td>
                       <td v-text="item.fee_rate + ' %'"></td>
-                      <td>{{formatDate(item.dis_date)}}</td>
+                      <td>{{ formatDate(item.dis_date) }}</td>
                       <td
                         v-text="item.status"
                         class="font-weight-bold text-success"
@@ -103,7 +106,7 @@
 <script>
 import httpAxios from "@/utils/http-axios";
 import $ from "jquery";
-import moment from 'moment';
+import moment from "moment";
 
 export default {
   name: "List disbursed",
@@ -147,11 +150,16 @@ export default {
       var self = this;
       httpAxios
         .delete("disbursement/" + dis_id)
-        .then(function () {
+        .then(function (response) {
           if (response.data.success) {
             self.$notify({
               type: "success",
               text: "Disbursement has been deleted!",
+            });
+          } else {
+            self.$notify({
+              type: "error",
+              text: "Delete disbursement failed!",
             });
           }
           self.getDisbursed();
