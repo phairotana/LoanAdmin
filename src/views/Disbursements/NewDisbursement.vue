@@ -346,6 +346,7 @@ const fetchCustomer = async (query) => {
         })
       );
   }
+  // const response = await fetch("http://localhost:8000/customer?" + where, {
   const response = await fetch("https://global-loan.herokuapp.com/customer?" + where, {
     headers: {
       "Content-Type": "application/json",
@@ -355,7 +356,7 @@ const fetchCustomer = async (query) => {
   });
   const data = await response.json(); // Here you have the data that you need
   return data.data.map((item) => {
-    return { value: item.id, label: item.first_name };
+    return { value: item.id, label: item.first_name + ' ' + item.last_name };
   });
 };
 
