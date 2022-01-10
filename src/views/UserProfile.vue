@@ -105,7 +105,7 @@
                       v-model="userData.address"
                     />
                   </div>
-                  <div class="col-lg-12">
+                  <!-- <div class="col-lg-12">
                     <base-input
                       ref="file"
                       id="file"
@@ -115,7 +115,7 @@
                       label="Profile"
                       input-classes="form-control-alternative"
                     />
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <!-- Description -->
@@ -175,9 +175,9 @@ export default {
     };
   },
   methods: {
-    uploadFile() {
-      this.file = this.$refs.file.files;
-    },
+    // uploadFile() {
+    //   this.file = this.$refs.file.files;
+    // },
     createUser() {
       const self = this;
       // self.v$.userData.$touch();

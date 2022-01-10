@@ -244,7 +244,7 @@
                     v-model="cusData.address"
                   />
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <base-input
                     alternative=""
                     type="file"
@@ -252,7 +252,7 @@
                     input-classes="form-control-alternative"
                     v-model="cusData.profile_img"
                   />
-                </div>
+                </div> -->
               </div>
               <button
                 @click="updateCustomer()"
@@ -394,7 +394,7 @@ export default {
         house_no: vm.cusData.house_no,
         street_no: vm.cusData.street_no,
         address: vm.cusData.address,
-        profile_im: vm.cusData.profile_im,
+        // profile_im: vm.cusData.profile_im,
       };
       const response = await httpAxios
         .put("customer/" + vm.$route.params.id, submitData)

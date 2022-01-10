@@ -244,7 +244,7 @@
                     v-model="cusData.address"
                   />
                 </div>
-                <div class="col-lg-12">
+                <!-- <div class="col-lg-12">
                   <base-input
                     alternative=""
                     type="file"
@@ -252,7 +252,7 @@
                     input-classes="form-control-alternative"
                     v-model="cusData.profile_img"
                   />
-                </div>
+                </div> -->
               </div>
               <button
                 @click="createCustomer()"
