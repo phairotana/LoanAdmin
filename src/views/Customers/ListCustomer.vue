@@ -30,9 +30,10 @@
                 </div>
               </div>
               <div style="overflow-x: auto">
-                <table 
+                <table
                   class="table table-striped Disbursed-table-sticky"
-                  id="dtHorizontalExample">
+                  id="dtHorizontalExample"
+                >
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -114,11 +115,30 @@ export default {
       var self = this;
       httpAxios
         .delete("customer/" + cus_id)
-        .then(function () {
+        .then(function (response) {
+          if (response.data.message == "Customer is active") {
+            self.$notify({
+              type: "warn",
+              text: "You cannot delete a customer that have loan",
+            });
+          } else if (response.data.success) {
+            self.$notify({
+              type: "success",
+              text: "Customer has been deleted!",
+            });
+          } else {
+            self.$notify({
+              type: "error",
+              text: "Deleting customer failed!",
+            });
+          }
           self.getCustomers();
         })
         .catch(function (error) {
-          console.log(error.message);
+          self.$notify({
+            type: "error",
+            text: "Deleting customer failed!",
+          });
         });
     },
   },
