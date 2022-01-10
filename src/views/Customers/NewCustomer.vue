@@ -112,7 +112,7 @@
                 <div class="col-lg-6">
                   <label class="font-weight-bold" for="Phone">Phone</label>
                   <vue-tel-input
-                    class="form-control form-control-alternative"
+                    class="form-control-alternative"
                   ></vue-tel-input>
                 </div>
                 <div class="col-lg-6">
