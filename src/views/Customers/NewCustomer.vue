@@ -151,7 +151,7 @@
                   <base-input
                     alternative=""
                     type="text"
-                    label="Cccupation"
+                    label="Occupation"
                     input-classes="form-control-alternative"
                     v-model="cusData.occupation"
                   />
