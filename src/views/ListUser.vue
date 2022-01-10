@@ -25,7 +25,7 @@
                 </div>
               </div>
 
-              <table class="table table-striped">
+              <table class="table table-striped Disbursed-table-sticky">
                 <thead>
                   <tr>
                     <th scope="col">#</th>

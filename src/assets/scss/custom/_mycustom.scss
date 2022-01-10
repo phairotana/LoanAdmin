@@ -11,3 +11,43 @@
 .multiselect {
   border: 0px !important;
 }
+
+// print schedule
+.sidebar {
+  display: none !important;
+}
+.app-header {
+  display: none !important;
+}
+.app-body {
+  background: #fff !important;
+}
+.table td,
+.table th {
+  border-top: 1px solid rgba(0, 40, 100, 0.12);
+  font-family: "Content" !important;
+  font-size: 17px;
+}
+.font-moul {
+  font-family: 'Moul';
+}
+.border-tb {
+  border-top: 2px solid #1b2a4e !important;
+  border-bottom: 2px solid #1b2a4e !important;
+}
+
+
+th,
+td {
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.Disbursed-table-sticky tr th:last-child,
+.Disbursed-table-sticky tr td:last-child {
+  position: sticky !important;
+  right: 0;
+  background-color: #f9fbfd !important;
+}

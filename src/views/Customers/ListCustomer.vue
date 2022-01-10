@@ -29,7 +29,7 @@
                   ></router-link>
                 </div>
               </div>
-              <table class="table table-striped">
+              <table class="table table-striped Disbursed-table-sticky">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -123,12 +123,3 @@ export default {
   },
 };
 </script>
-<style>
-.col-xl-12,
-.col-xl,
-.col-xl-auto {
-  position: relative;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-</style>

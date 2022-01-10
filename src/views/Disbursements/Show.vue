@@ -100,23 +100,32 @@
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
                     <td class="border-0" style="width: 25%">
-                      {{ disDetial.balance }}
+                      {{ formatCurrency(disDetial.balance, "$") }}
                     </td>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       Currency
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
-                    <td class="border-0" style="width: 25%">
-                      {{ disDetial.currency }}
-                    </td>
+                    <td
+                      class="border-0"
+                      style="width: 25%"
+                      v-text="disDetial.currency"
+                    ></td>
                   </tr>
                   <tr>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       Duration
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
-                    <td class="border-0" style="width: 25%">
-                      {{ disDetial.duration }}
+                    <td
+                      v-if="disDetial.duration > 1"
+                      class="border-0"
+                      style="width: 25%"
+                    >
+                      {{ disDetial.duration + " Months" }}
+                    </td>
+                    <td v-else class="border-0" style="width: 25%">
+                      {{ disDetial.duration + " Month" }}
                     </td>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       Duration Period
@@ -132,7 +141,7 @@
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
                     <td class="border-0" style="width: 25%">
-                      {{ disDetial.interest_rate }}
+                      {{ disDetial.interest_rate + " %" }}
                     </td>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       Interest Period
@@ -148,7 +157,7 @@
                     </td>
                     <td class="border-0" style="width: 5%">:</td>
                     <td class="border-0" style="width: 25%">
-                      {{ disDetial.fee_rate }}
+                      {{ disDetial.fee_rate + " %" }}
                     </td>
                     <td class="border-0 font-weight-bold" style="width: 20%">
                       Frequency
@@ -188,7 +197,6 @@
                         <label for="payment">Monthly Payment</label>
                         <div class="form-control-alternative">
                           <input
-                            readonly
                             type="number"
                             step="any"
                             class="form-control"
@@ -214,6 +222,19 @@
                 <div class="table-responsive">
                   <table class="table table-hover" aria-hidden="true">
                     <thead>
+                      <tr class="text-nowrap">
+                        <th scope="" colspan="8" class="pl-0 pb-0">
+                          <router-link
+                            v-bind:to="'/disbursed/' + disDetial.id + '/print-schedule'"
+                            class="btn btn-success btn-sm"
+                            title="Preview Schedule"
+                          >
+                            <em class="far fa-eye"></em>
+                          </router-link>
+                        </th>
+                      </tr>
+                    </thead>
+                    <thead>
                       <tr class="text-nowrap bg-light">
                         <th scope="">No</th>
                         <th scope="">Payment Date</th>
@@ -232,7 +253,7 @@
                       >
                         <td v-if="index == 0">-</td>
                         <td v-else>{{ index }}</td>
-                        <td>{{formatDate(item.collection_date)}}</td>
+                        <td>{{ formatDate(item.collection_date) }}</td>
                         <td v-text="formatCurrency(item.balance, '$')"></td>
                         <td v-text="formatCurrency(item.principal, '$')"></td>
                         <td v-text="formatCurrency(item.interest, '$')"></td>
@@ -297,7 +318,7 @@
                         :key="item.id"
                       >
                         <td v-text="index + 1"></td>
-                        <td>{{formatDate(item.paid_date)}}</td>
+                        <td>{{ formatDate(item.paid_date) }}</td>
                         <td v-text="item.invoice"></td>
                         <td
                           v-text="formatCurrency(item.principal_paid, '$')"
@@ -420,7 +441,7 @@
                     >
                       <tr v-if="item.status == 'Paid Off'">
                         <td v-text="index + 1"></td>
-                        <td>{{formatDate(item.paid_date)}}</td>
+                        <td>{{ formatDate(item.paid_date) }}</td>
                         <td v-text="item.invoice"></td>
                         <td
                           v-text="formatCurrency(item.principal_paid, '$')"
@@ -461,7 +482,7 @@
 <script>
 import httpAxios from "@/utils/http-axios";
 import $ from "jquery";
-import moment from 'moment';
+import moment from "moment";
 
 export default {
   name: "Show",
@@ -538,49 +559,52 @@ export default {
           "disbursement/" + vm.$route.params.id + "/schedule/paynow",
           vm.amountPay
         )
-        .then(() => {
+        .then((response) => {
           vm.disbursedDetial();
           vm.schedulePaid();
-          vm.$swal({
-            position: "top-end",
-            icon: "success",
-            title: "Payment Successfuuly!!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          if (response.data.message == "Disbursement was close!") {
+            vm.$notify({
+              type: "success",
+              text: "Thsi loan is already fully paid!",
+            });
+          } else if (response.data.success) {
+            vm.$notify({
+              type: "success",
+              text: "Receive payment successfully!",
+            });
+          } else {
+            vm.$notify({ type: "error ", text: "Receive payment failed!" });
+          }
         })
         .catch(function (error) {
-          console.log(error.message);
+          vm.$notify({ type: "error ", text: "Receive payment failed!" });
         });
     },
     btnPayOff() {
       var vm = this;
       httpAxios
         .post("disbursement/" + vm.$route.params.id + "/schedule/payoff")
-        .then(() => {
+        .then((response) => {
           vm.disbursedDetial();
           vm.schedulePaid();
-          vm.$swal({
-            position: "top-end",
-            icon: "success",
-            title: "Pay Off Loan Successfuuly!!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
+          if (response.data.message == "Disbursement was close!") {
+            vm.$notify({
+              type: "success",
+              text: "Thsi loan is already fully paid!",
+            });
+          } else if (response.data.success) {
+            vm.$notify({
+              type: "success",
+              text: "Payoff loan successfully!",
+            });
+          } else {
+            vm.$notify({ type: "error ", text: "Payoff loan failed!" });
+          }
         })
         .catch(function (error) {
-          console.log(error.message);
+          vm.$notify({ type: "error ", text: "Payoff loan failed!" });
         });
     },
   },
 };
 </script>
-<style>
-.col-xl-12,
-.col-xl,
-.col-xl-auto {
-  position: relative;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-</style>

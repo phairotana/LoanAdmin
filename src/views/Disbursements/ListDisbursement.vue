@@ -166,21 +166,3 @@ export default {
   },
 };
 </script>
-<style>
-
-
-th,
-td {
-  text-align: left;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-.Disbursed-table-sticky tr th:last-child,
-.Disbursed-table-sticky tr td:last-child {
-  position: sticky !important;
-  right: 0;
-  background-color: #f9fbfd !important;
-}
-</style>

@@ -180,6 +180,7 @@ export default {
     },
     createUser() {
       const self = this;
+      // self.v$.userData.$touch();
       const formData = new FormData();
       formData.append("name", self.userData.name);
       formData.append("email", self.userData.email);

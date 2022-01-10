@@ -26,11 +26,11 @@
               <span class="avatar avatar-sm rounded-circle">
                 <img
                   alt="Image placeholder"
-                  src="img/theme/rotana-800X800.jpeg"
+                  src="img/theme/rotana-800X800.png"
                 />
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm font-weight-bold">Phai Rotana</span>
+                <span class="mb-0 text-sm font-weight-bold">Z1 SOLUTION</span>
               </div>
             </div>
           </template>

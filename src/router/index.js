@@ -17,6 +17,7 @@ import UpdateUser from "../views/UpdateUser.vue";
 import UserDetial from "../views/UserDetial.vue";
 import MyAccount from "../views/MyAccount.vue";
 import ShowDis from "../views/Disbursements/Show.vue";
+import PrintSchedule from "../views/Disbursements/PrintSchedule.vue";
 
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
@@ -104,6 +105,12 @@ const routes = [
         path: "/disbursed/:id/show",
         name: "Priview Disbursement",
         components: { default: ShowDis },
+        meta: { requireAuth: true },
+      },
+      {
+        path: "/disbursed/:id/print-schedule",
+        name: "Print Schedule",
+        components: { default: PrintSchedule },
         meta: { requireAuth: true },
       },
     ],
