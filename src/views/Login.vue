@@ -114,6 +114,8 @@ export default {
   methods: {
     async login() {
       const self = this;
+      self.v$.username.$touch();
+      self.v$.password.$touch();
       const formData = new FormData();
       formData.append("username", self.username);
       formData.append("password", self.password);

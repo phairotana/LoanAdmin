@@ -168,6 +168,7 @@ export default {
   },
   methods: {
     async register() {
+      this.v$.registerData.$touch();
       const response = await httpAxios
         .post("register", this.registerData)
         .catch(function () {
