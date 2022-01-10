@@ -37,10 +37,10 @@
           <div class="dropdown-header noti-title">
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
-          <router-link to="/my-account" class="btn-sm">
+          <!-- <router-link to="/my-account" class="btn-sm">
             <em class="ni ni-single-02"></em>
             <span> My profile</span> </router-link
-          ><br />
+          > -->
           <router-link to="/login" v-on:click="logOut" class="btn-sm">
             <em class="ni ni-user-run"></em>
             <span> Logout</span>

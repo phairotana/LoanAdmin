@@ -149,8 +149,8 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   let loggedUser = store.getters.getLoggedUser;
-  if (to.meta.requireAuth && !loggedUser) next({ name: 'Login' })
-  else next()
-})
+  if (to.meta.requireAuth && !loggedUser) next({ name: "Login" });
+  else next();
+});
 
 export default router;

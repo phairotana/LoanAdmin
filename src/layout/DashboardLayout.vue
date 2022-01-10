@@ -21,13 +21,13 @@
             path: 'customer',
           }"
         />
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'New Customer',
             icon: 'ni ni-fat-add',
             path: 'new-customer',
           }"
-        />
+        /> -->
         <!-- Disbursement -->
         <sidebar-item
           :link="{
@@ -36,13 +36,13 @@
             path: 'disbursed',
           }"
         />
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'New Disbursement',
             icon: 'ni ni-fat-add',
             path: 'new-disbursement',
           }"
-        />
+        /> -->
         <sidebar-item
           :link="{
             name: 'User Lists',
@@ -50,13 +50,13 @@
             path: 'user',
           }"
         />
-        <sidebar-item
+        <!-- <sidebar-item
           :link="{
             name: 'New User',
             icon: 'ni ni-single-02 text-yellow',
             path: '/new-user',
           }"
-        />
+        /> -->
         <sidebar-item
           :link="{
             name: 'Login',

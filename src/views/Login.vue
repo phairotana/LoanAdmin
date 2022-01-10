@@ -59,25 +59,18 @@
               </div>
             </div>
 
-            <base-checkbox class="custom-control-alternative">
+            <!-- <base-checkbox class="custom-control-alternative">
               <span class="text-muted">Remember me</span>
-            </base-checkbox>
+            </base-checkbox> -->
             <div class="text-center">
               <button type="submit" class="my-4 btn btn-primary">
                 Sign in
               </button>
             </div>
           </form>
-        </div>
-      </div>
-      <div class="row mt-3">
-        <div class="col-6">
-          <a href="#" class="text-light"><small>Forgot password?</small></a>
-        </div>
-        <div class="col-6 text-right">
-          <router-link to="/register" class="text-light"
-            ><small>Create new account</small></router-link
-          >
+            <router-link to="/register" class="text-light"
+              ><small class="text-primary">Create new account</small></router-link
+            >
         </div>
       </div>
     </div>

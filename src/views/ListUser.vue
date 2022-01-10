@@ -21,7 +21,12 @@
             <div class="bg-white border-0">
               <div class="row align-items-center">
                 <div class="col-12">
-                  <h3 class="mb-0">All Users</h3>
+                  <router-link
+                    to="/new-user"
+                    class="btn btn-primary btn-sm mb-2"
+                    title="Add New"
+                    ><em class="far fa-plus-square"></em
+                  ></router-link>
                 </div>
               </div>
 
