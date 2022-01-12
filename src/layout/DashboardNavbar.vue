@@ -30,7 +30,7 @@
                 />
               </span>
               <div class="media-body ml-2 d-none d-lg-block">
-                <span class="mb-0 text-sm font-weight-bold">Z1 SOLUTION</span>
+                <span class="mb-0 text-sm font-weight-bold">{{ userData.name }}</span>
               </div>
             </div>
           </template>
@@ -51,12 +51,15 @@
   </base-nav>
 </template>
 <script>
+import httpAxios from "@/utils/http-axios";
+
 export default {
   data() {
     return {
       activeNotifications: false,
       showMenu: false,
       searchQuery: "",
+      userData: {},
     };
   },
   methods: {
@@ -75,6 +78,17 @@ export default {
         text: "Loged-out, See you later!",
       });
       this.$store.commit("REMOVE_LOGGED_USER");
+    },
+    async getUserMe() {
+      const self = this;
+      const result = await httpAxios.get("users/me");
+      if (result.data.success) {
+        self.userData = result.data.data;
+      }
+    },
+    created() {
+      alert(1);
+      this.getUserMe();
     },
   },
 };

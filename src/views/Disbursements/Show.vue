@@ -272,14 +272,24 @@
                           "
                         ></td>
                         <td
-                          v-if="item.status != 'Not Yet Due'"
+                          v-if="item.status == 'Not Yet Due'"
                           v-text="item.status"
-                          class="font-weight-bold text-success"
+                          class="font-weight-bold text-primary"
+                        ></td>
+                        <td
+                          v-else-if="item.status == 'Past Due'"
+                          v-text="item.status"
+                          class="font-weight-bold text-danger"
+                        ></td>
+                        <td
+                          v-else-if="item.status == 'Due Today'"
+                          v-text="item.status"
+                          class="font-weight-bold text-info"
                         ></td>
                         <td
                           v-else
                           v-text="item.status"
-                          class="font-weight-bold text-info"
+                          class="font-weight-bold text-success"
                         ></td>
                       </tr>
                     </tbody>
@@ -505,13 +515,13 @@ import moment from "moment";
 
 export const sweetalertConfig = function (alertText) {
   return {
-      title: "Confirmation",
-      text: alertText,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      reverseButtons: true
+    title: "Confirmation",
+    text: alertText,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    reverseButtons: true,
   };
 };
 
@@ -628,27 +638,27 @@ export default {
       ).then((result) => {
         if (result.value) {
           httpAxios
-          .post("disbursement/" + vm.$route.params.id + "/schedule/payoff")
-          .then((response) => {
-            vm.disbursedDetial();
-            vm.schedulePaid();
-            if (response.data.message == "Disbursement was close!") {
-              vm.$notify({
-                type: "success",
-                text: "Thsi loan is already fully paid!",
-              });
-            } else if (response.data.success) {
-              vm.$notify({
-                type: "success",
-                text: "Payoff loan successfully!",
-              });
-            } else {
+            .post("disbursement/" + vm.$route.params.id + "/schedule/payoff")
+            .then((response) => {
+              vm.disbursedDetial();
+              vm.schedulePaid();
+              if (response.data.message == "Disbursement was close!") {
+                vm.$notify({
+                  type: "success",
+                  text: "Thsi loan is already fully paid!",
+                });
+              } else if (response.data.success) {
+                vm.$notify({
+                  type: "success",
+                  text: "Payoff loan successfully!",
+                });
+              } else {
+                vm.$notify({ type: "error ", text: "Payoff loan failed!" });
+              }
+            })
+            .catch(function (error) {
               vm.$notify({ type: "error ", text: "Payoff loan failed!" });
-            }
-          })
-          .catch(function (error) {
-            vm.$notify({ type: "error ", text: "Payoff loan failed!" });
-          });
+            });
         } else {
           //
         }
