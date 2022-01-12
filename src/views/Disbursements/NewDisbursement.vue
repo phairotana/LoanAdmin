@@ -332,22 +332,8 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 
 const fetchCustomer = async (query) => {
-  let where = "";
-  if (query) {
-    where =
-      "id=" +
-      encodeURIComponent(
-        JSON.stringify({
-          firstName: {
-            $regex: `${query}|${query.toUpperCase()}|${
-              query[0].toUpperCase() + query.slice(1)
-            }`,
-          },
-        })
-      );
-  }
-  // const response = await fetch("http://localhost:8000/customer?" + where, {
-  const response = await fetch("https://global-loan.herokuapp.com/customer?" + where, {
+  // const response = await fetch("http://localhost:8000/customer?name=" + query, {
+  const response = await fetch("https://global-loan.herokuapp.com/customer?name=" + query, {
     headers: {
       "Content-Type": "application/json",
       "x-access-token": "token-value",

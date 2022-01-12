@@ -67,3 +67,8 @@ tr:nth-child(even) {
   box-shadow: none;
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+.swal2-popup {
+  width: 28em !important;
+  font-size: 12px !important;
+  background: #f1f4f8 !important;
+}

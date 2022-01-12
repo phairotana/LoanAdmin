@@ -88,6 +88,17 @@
 <script>
 import httpAxios from "@/utils/http-axios";
 import moment from "moment";
+export const sweetalertConfig = function (alertText) {
+  return {
+      title: "Confirmation",
+      text: alertText,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      reverseButtons: true
+  };
+};
 
 export default {
   name: "List Customer",
@@ -113,32 +124,41 @@ export default {
     },
     deleteCustomer(cus_id) {
       var self = this;
-      httpAxios
-        .delete("customer/" + cus_id)
-        .then(function (response) {
-          if (response.data.message == "Customer is active") {
-            self.$notify({
-              type: "warn",
-              text: "You cannot delete a customer that have loan",
-            });
-          } else if (response.data.success) {
-            self.$notify({
-              type: "success",
-              text: "Customer has been deleted!",
-            });
+
+      self
+        .$swal(sweetalertConfig("Are you sure you want to delete this customer?"))
+        .then((result) => {
+          if (result.value) {
+            httpAxios
+              .delete("customer/" + cus_id)
+              .then(function (response) {
+                if (response.data.message == "Customer is active") {
+                  self.$notify({
+                    type: "warn",
+                    text: "You cannot delete a customer that have loan",
+                  });
+                } else if (response.data.success) {
+                  self.$notify({
+                    type: "success",
+                    text: "Customer has been deleted!",
+                  });
+                } else {
+                  self.$notify({
+                    type: "error",
+                    text: "Deleting customer failed!",
+                  });
+                }
+                self.getCustomers();
+              })
+              .catch(function (error) {
+                self.$notify({
+                  type: "error",
+                  text: "Deleting customer failed!",
+                });
+              });
           } else {
-            self.$notify({
-              type: "error",
-              text: "Deleting customer failed!",
-            });
+            //
           }
-          self.getCustomers();
-        })
-        .catch(function (error) {
-          self.$notify({
-            type: "error",
-            text: "Deleting customer failed!",
-          });
         });
     },
   },

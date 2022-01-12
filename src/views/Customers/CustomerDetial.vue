@@ -180,13 +180,13 @@
                   >
                     <em class="far fa-edit"></em>
                   </router-link>
-                  <router-link
-                    v-bind:to="'/customer/' + cusDetial.id"
+                  <!-- <button
+                    v-on:click="deleteCustomer(cusDetial.id)"
                     class="btn btn-sm btn-danger"
-                    title="Delete"
+                    type="button"
                   >
                     <em class="far fa-trash-alt"></em>
-                  </router-link>
+                  </button> -->
                 </td>
               </tr>
             </table>
@@ -199,8 +199,18 @@
 
 <script>
 import httpAxios from "@/utils/http-axios";
-import moment from 'moment';
-
+import moment from "moment";
+export const sweetalertConfig = function (alertText) {
+  return {
+    title: "Confirmation",
+    text: alertText,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    reverseButtons: true,
+  };
+};
 export default {
   name: "Customer Detial",
   data: function () {
@@ -221,6 +231,45 @@ export default {
         })
         .catch(function (error) {
           console.log(error.message);
+        });
+    },
+    deleteCustomer(cus_id) {
+      var self = this;
+      self
+        .$swal(sweetalertConfig("Are you sure you want to delete this customer?"))
+        .then((result) => {
+          if (result.value) {
+            httpAxios
+              .delete("customer/" + cus_id)
+              .then(function (response) {
+                if (response.data.message == "Customer is active") {
+                  self.$notify({
+                    type: "warn",
+                    text: "You cannot delete a customer that have loan",
+                  });
+                } else if (response.data.success) {
+                  self.$notify({
+                    type: "success",
+                    text: "Customer has been deleted!",
+                  });
+                  self.$router.push("/customer");
+                } else {
+                  self.$notify({
+                    type: "error",
+                    text: "Deleting customer failed!",
+                  });
+                }
+                self.getCustomers();
+              })
+              .catch(function (error) {
+                self.$notify({
+                  type: "error",
+                  text: "Deleting customer failed!",
+                });
+              });
+          } else {
+            //
+          }
         });
     },
   },

@@ -108,6 +108,18 @@ import httpAxios from "@/utils/http-axios";
 import $ from "jquery";
 import moment from "moment";
 
+export const sweetalertConfig = function (alertText) {
+  return {
+      title: "Confirmation",
+      text: alertText,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      reverseButtons: true
+  };
+};
+
 export default {
   name: "List disbursed",
   data: function () {
@@ -148,28 +160,36 @@ export default {
     },
     deleteDisbursed(dis_id) {
       var self = this;
-      httpAxios
-        .delete("disbursement/" + dis_id)
-        .then(function (response) {
-          if (response.data.success) {
-            self.$notify({
-              type: "success",
-              text: "Disbursement has been deleted!",
+      self.$swal(
+        sweetalertConfig("Are you sure you want to delete this loan?")
+      ).then((result) => {
+        if (result.value) {
+          httpAxios
+            .delete("disbursement/" + dis_id)
+            .then(function (response) {
+              if (response.data.success) {
+                self.$notify({
+                  type: "success",
+                  text: "Disbursement has been deleted!",
+                });
+              } else {
+                self.$notify({
+                  type: "error",
+                  text: "Delete disbursement failed!",
+                });
+              }
+              self.getDisbursed();
+            })
+            .catch(function (error) {
+              self.$notify({
+                type: "error",
+                text: "Delete disbursement failed!",
+              });
             });
-          } else {
-            self.$notify({
-              type: "error",
-              text: "Delete disbursement failed!",
-            });
-          }
-          self.getDisbursed();
-        })
-        .catch(function (error) {
-          self.$notify({
-            type: "error",
-            text: "Delete disbursement failed!",
-          });
-        });
+        } else {
+          //
+        }
+      });
     },
   },
 };

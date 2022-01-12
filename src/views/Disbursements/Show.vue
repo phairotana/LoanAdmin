@@ -503,6 +503,18 @@ import httpAxios from "@/utils/http-axios";
 import $ from "jquery";
 import moment from "moment";
 
+export const sweetalertConfig = function (alertText) {
+  return {
+      title: "Confirmation",
+      text: alertText,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      reverseButtons: true
+  };
+};
+
 export default {
   name: "Show",
   data() {
@@ -575,56 +587,72 @@ export default {
     },
     btnPay() {
       var vm = this;
-      httpAxios
-        .post(
-          "disbursement/" + vm.$route.params.id + "/schedule/paynow",
-          vm.amountPay
-        )
-        .then((response) => {
-          vm.disbursedDetial();
-          vm.schedulePaid();
-          if (response.data.message == "Disbursement was close!") {
-            vm.$notify({
-              type: "success",
-              text: "Thsi loan is already fully paid!",
+      vm.$swal(
+        sweetalertConfig("Are you sure you want to receive payment?")
+      ).then((result) => {
+        if (result.value) {
+          httpAxios
+            .post(
+              "disbursement/" + vm.$route.params.id + "/schedule/paynow",
+              vm.amountPay
+            )
+            .then((response) => {
+              vm.disbursedDetial();
+              vm.schedulePaid();
+              if (response.data.message == "Disbursement was close!") {
+                vm.$notify({
+                  type: "success",
+                  text: "Thsi loan is already fully paid!",
+                });
+              } else if (response.data.success) {
+                vm.$notify({
+                  type: "success",
+                  text: "Receive payment successfully!",
+                });
+              } else {
+                vm.$notify({ type: "error ", text: "Receive payment failed!" });
+              }
+            })
+            .catch(function (error) {
+              vm.$notify({ type: "error ", text: "Receive payment failed!" });
             });
-          } else if (response.data.success) {
-            vm.$notify({
-              type: "success",
-              text: "Receive payment successfully!",
-            });
-          } else {
-            vm.$notify({ type: "error ", text: "Receive payment failed!" });
-          }
-        })
-        .catch(function (error) {
-          vm.$notify({ type: "error ", text: "Receive payment failed!" });
-        });
+        } else {
+          //
+        }
+      });
     },
     btnPayOff() {
       var vm = this;
-      httpAxios
-        .post("disbursement/" + vm.$route.params.id + "/schedule/payoff")
-        .then((response) => {
-          vm.disbursedDetial();
-          vm.schedulePaid();
-          if (response.data.message == "Disbursement was close!") {
-            vm.$notify({
-              type: "success",
-              text: "Thsi loan is already fully paid!",
-            });
-          } else if (response.data.success) {
-            vm.$notify({
-              type: "success",
-              text: "Payoff loan successfully!",
-            });
-          } else {
+      vm.$swal(
+        sweetalertConfig("Are you sure you want to make payoff loan?")
+      ).then((result) => {
+        if (result.value) {
+          httpAxios
+          .post("disbursement/" + vm.$route.params.id + "/schedule/payoff")
+          .then((response) => {
+            vm.disbursedDetial();
+            vm.schedulePaid();
+            if (response.data.message == "Disbursement was close!") {
+              vm.$notify({
+                type: "success",
+                text: "Thsi loan is already fully paid!",
+              });
+            } else if (response.data.success) {
+              vm.$notify({
+                type: "success",
+                text: "Payoff loan successfully!",
+              });
+            } else {
+              vm.$notify({ type: "error ", text: "Payoff loan failed!" });
+            }
+          })
+          .catch(function (error) {
             vm.$notify({ type: "error ", text: "Payoff loan failed!" });
-          }
-        })
-        .catch(function (error) {
-          vm.$notify({ type: "error ", text: "Payoff loan failed!" });
-        });
+          });
+        } else {
+          //
+        }
+      });
     },
   },
 };
